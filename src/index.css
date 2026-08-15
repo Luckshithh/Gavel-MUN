@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap'); /* Fallback if local not available */
+
+:root {
+  /* Blue Eclipse Palette */
+  --bg-color: #0F0E47;
+  --bg-section: #0F0E47; 
+  --accent-light: #8686AC;
+  --accent-mid: #505081;
+  --accent-dark: #272757;
+  
+  --text-primary: #8686AC; /* Mistan uses a lighter accent for main text to glow */
+  --text-secondary: #505081;
+  --text-highlight: #ffffff;
+  --border-color: #505081;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Times New Roman', Times, serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Grain Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Add a subtle dark vignette / gradient to mimic the behance background */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: radial-gradient(circle at 50% 50%, rgba(15, 14, 71, 0) 0%, rgba(15, 14, 71, 0.8) 100%);
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  color: var(--text-highlight);
+  letter-spacing: -0.02em;
+}
+
+/* Display / Massive text */
+.display-text {
+  font-size: clamp(6rem, 20vw, 18rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  text-align: center;
+  color: var(--accent-light);
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  display: block;
+  z-index: 20;
+  position: relative;
+}
+
+/* Corner Metadata (Mistan Style) */
+.metadata {
+  position: fixed;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  z-index: 50;
+  text-transform: capitalize;
+}
+
+.meta-tl { top: 2rem; left: 2.5rem; }
+.meta-tc { top: 2rem; left: 50%; transform: translateX(-50%); position: absolute; }
+.meta-tr { top: 2rem; right: 2.5rem; }
+.meta-bl { bottom: 2rem; left: 2.5rem; }
+.meta-bc { bottom: 2rem; left: 50%; transform: translateX(-50%); position: absolute; }
+.meta-br { bottom: 2rem; right: 2.5rem; }
+
+/* Utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+.gap-8 { gap: 2rem; }
+.gap-12 { gap: 3rem; }
+
+/* Deconstructed Inputs */
+input, select, textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--text-secondary);
+  color: var(--text-highlight);
+  padding: 0.5rem 0;
+  font-family: inherit;
+  font-size: 1.125rem;
+  outline: none;
+  border-radius: 0;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+input::placeholder {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+input:focus {
+  border-color: var(--text-highlight);
+}
+
+/* Pure Text Buttons */
+button {
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+button:hover {
+  color: var(--text-highlight);
+}
+
+.button-large {
+  font-size: 1.25rem;
+  text-transform: none;
+  letter-spacing: 0;
+  font-style: italic;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: auto;
+  overflow-y: auto;
+  position: relative;
+  z-index: 20;
+}
+
+.hero-section {
+  position: sticky;
+  left: 0;
+  width: 100vw;
+  padding-top: 15vh;
+  padding-bottom: 5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.manuscript-section {
+  width: max-content;
+  margin: 0 auto;
+  padding: 4rem 5vw 10rem 5vw;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8rem;
+}
+
+.manuscript-section > * {
+  width: 700px;
+  max-width: 90vw;
+  flex-shrink: 0;
+}
+
+/* Typographic Lists */
+.text-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.text-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--accent-dark);
+  padding-bottom: 0.5rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-bottom: 1px solid var(--accent-light);
+}
+
+/* Hide ugly number input spin buttons */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.section-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  display: block;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+/* Modal - full screen takeover, editorial style */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 14, 71, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 4rem;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: -3rem;
+  right: 0;
+}
