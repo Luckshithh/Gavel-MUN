@@ -11,6 +11,8 @@ export default function Home() {
   const [munName, setMunName] = useState(() => {
     return localStorage.getItem('last_mun_name') || '';
   });
+  
+  const lastSessionId = localStorage.getItem('last_committee_id');
 
   const handleCreate = (e) => {
     e.preventDefault();
@@ -18,9 +20,12 @@ export default function Home() {
       localStorage.setItem('last_committee_name', committeeName.trim());
       localStorage.setItem('last_mun_name', munName.trim());
       
-      const id = encodeURIComponent(committeeName.trim().toLowerCase().replace(/\s+/g, '-'));
+      const baseId = committeeName.trim().toLowerCase().replace(/\s+/g, '-');
+      const randomHash = Math.random().toString(36).substring(2, 6);
+      const id = encodeURIComponent(`${baseId}-${randomHash}`);
       
-      // Save MUN Name to Firebase for this committee
+      localStorage.setItem('last_committee_id', id);
+      
       syncStateToDB(id, 'munName', munName.trim());
       
       navigate(`/dashboard/${id}`);
@@ -56,6 +61,16 @@ export default function Home() {
           <button type="submit" style={{ padding: '1rem', fontSize: '1.125rem' }}>
             Create Register <ArrowRight size={20} />
           </button>
+          
+          {lastSessionId && (
+            <button 
+              type="button" 
+              onClick={() => navigate(`/dashboard/${lastSessionId}`)}
+              style={{ padding: '0.5rem', fontSize: '1rem', marginTop: '1rem', color: 'var(--text-secondary)' }}
+            >
+              Resume Previous Session ({localStorage.getItem('last_committee_name')})
+            </button>
+          )}
         </form>
       </div>
 
