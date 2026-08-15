@@ -17,7 +17,7 @@ export default function Header({ committeeId, onOpenLedger }) {
   return (
     <>
       <div className="metadata meta-tl flex items-center gap-2" style={{ fontSize: '1.25rem' }}>
-        Gavel <Gavel size={24} style={{ transform: 'scaleX(-1)' }} />
+        Gavell <Gavel size={24} style={{ transform: 'scaleX(-1)' }} />
       </div>
       <div style={{ position: 'sticky', left: 0, width: '100vw', height: 0, overflow: 'visible', zIndex: 50 }}>
         <div className="metadata" style={{ top: '2rem', left: '50%', transform: 'translateX(-50%)', position: 'absolute', letterSpacing: '0.2em', fontSize: '1.25rem' }}>

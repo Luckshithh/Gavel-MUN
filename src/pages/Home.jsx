@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, ArrowRight } from 'lucide-react';
+import { Gavel, ArrowRight } from 'lucide-react';
 import { syncStateToDB } from '../lib/firebase';
 
 export default function Home() {
@@ -31,17 +31,14 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center" style={{ minHeight: '100vh', padding: '2rem' }}>
 
       <div className="card animate-fade-in" style={{ maxWidth: '600px', width: '100%', textAlign: 'center', padding: '4rem 2rem' }}>
-        <Globe size={64} style={{ margin: '0 auto 1.5rem', opacity: 0.8 }} />
-        <h1 style={{ marginBottom: '1rem' }}>MUN Chair Dashboard</h1>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '3rem', fontSize: '1.125rem' }}>
-          A premium, minimal workspace for Model UN Chairs to manage their committees effortlessly.
-        </p>
+        <Gavel size={64} style={{ margin: '0 auto 1.5rem', opacity: 0.8, transform: 'scaleX(-1)' }} />
+        <h1 style={{ marginBottom: '3rem' }}>GAVEL.</h1>
 
         <form onSubmit={handleCreate} className="flex flex-col gap-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
           <div className="input-group">
             <input
               type="text"
-              placeholder="Committee Name (e.g. UNSC, DISEC)"
+              placeholder="Committee Name"
               value={committeeName}
               onChange={(e) => setCommitteeName(e.target.value)}
               required
@@ -49,7 +46,7 @@ export default function Home() {
             />
             <input
               type="text"
-              placeholder="MUN Name (e.g. Harvard MUN)"
+              placeholder="MUN Name"
               value={munName}
               onChange={(e) => setMunName(e.target.value)}
               required

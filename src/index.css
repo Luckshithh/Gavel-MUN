@@ -120,7 +120,6 @@ input, select, textarea {
 
 input::placeholder {
   color: var(--text-secondary);
-  font-style: italic;
 }
 
 input:focus {
