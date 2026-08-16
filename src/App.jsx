@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 
@@ -11,6 +12,7 @@ function App() {
           <Route path="/dashboard/:committeeId" element={<Dashboard />} />
         </Routes>
       </div>
+      <Analytics />
     </Router>
   );
 }
