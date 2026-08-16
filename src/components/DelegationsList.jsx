@@ -235,8 +235,8 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
     <div>
       <div className="flex justify-between items-baseline" style={{ marginBottom: '2rem' }}>
         <span className="section-title">
-          {isModCaucus ? `Moderated Caucus: ${activeCaucus.topic || 'General'} / ${activeCaucus.slots} Slots` : 
-           isGslCaucus ? `General Speakers List / ${Object.keys(speakerSlots).length} Speakers` : 
+          {isModCaucus ? `Moderated Caucus: ${activeCaucus.topic || 'General'} / ${activeSlotIndex !== null ? activeSlotIndex : 0}/${activeCaucus.slots} Delegates Finished` : 
+           isGslCaucus ? `General Speakers List / ${activeSlotIndex !== null ? activeSlotIndex : 0}/${Object.keys(speakerSlots).length} Delegates Finished` : 
            isUnmodCaucus ? `Unmoderated Caucus: ${activeCaucus.topic || 'General'} / ${activeCaucus.totalTime} mins` :
            ''}
         </span>

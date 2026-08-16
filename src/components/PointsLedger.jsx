@@ -124,32 +124,42 @@ export default function PointsLedger({ committeeId, onClose }) {
     const reader = new FileReader();
     reader.onload = (event) => {
       const text = event.target.result;
-      const rows = text.split('\n');
+      const rows = text.split('\n').map(r => r.trim()).filter(r => r);
+      if (rows.length === 0) return;
+
       const newDels = [];
       
-      rows.forEach((row, i) => {
-        const cols = row.split(',');
-        const name = cols[0].replace(/['"\r]/g, '').trim();
-        // Skip header words commonly used
+      const headerCols = rows[0].split(',').map(c => c.replace(/['"\r]/g, '').trim().toLowerCase());
+      let countryIndex = headerCols.findIndex(c => c === 'country' || c === 'delegation');
+      
+      let startIndex = 0;
+      if (countryIndex !== -1) {
+        startIndex = 1;
+      } else {
+        countryIndex = 0;
+      }
+
+      for (let i = startIndex; i < rows.length; i++) {
+        const cols = rows[i].split(',');
+        if (cols.length <= countryIndex) continue;
+
+        const name = cols[countryIndex].replace(/['"\r]/g, '').trim();
         if (name && name.toLowerCase() !== 'country' && name.toLowerCase() !== 'delegation') {
-          // Check if it already exists in the current delegations or newly parsed ones
           if (!delegations.find(d => d.name.toLowerCase() === name.toLowerCase()) && 
               !newDels.find(d => d.name.toLowerCase() === name.toLowerCase())) {
             newDels.push({ id: Date.now() + i, name: name, status: '-' });
           }
         }
-      });
+      }
       
       if (newDels.length > 0) {
         const updated = [...delegations, ...newDels];
         setDelegations(updated);
         syncStateToDB(committeeId, 'delegations', updated);
       }
-      
-      // Reset input
-      e.target.value = null;
     };
     reader.readAsText(file);
+    e.target.value = null;
   };
 
   const toggleStatus = (id) => {

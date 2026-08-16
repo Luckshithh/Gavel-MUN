@@ -76,7 +76,7 @@ export default function Dashboard() {
       <div className="manuscript-section">
         {/* Hide CaucusManager if a Mod/Unmod is currently running, to prevent starting a 3rd concurrent caucus */}
         {!activeSubCaucus && (
-           <CaucusManager activeForeground={activeForeground} onStartCaucus={handleStartCaucus} />
+           <CaucusManager committeeId={committeeId} activeForeground={activeSubCaucus || activeGsl} onStartCaucus={handleStartCaucus} />
         )}
         
         {/* Dynamic Reordering based on Caucus state */}
