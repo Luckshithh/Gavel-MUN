@@ -20,6 +20,9 @@ export default function Header({ committeeId, onOpenLedger }) {
       <div className="metadata meta-tl" style={{ fontSize: '1.25rem' }}>
         <Link to="/" style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} title="Return to Home">
           Gavell <Gavel size={24} style={{ transform: 'scaleX(-1)' }} />
+          <span style={{ fontSize: '0.8rem', color: 'red', marginLeft: '1rem' }}>
+            DEBUG DB: {import.meta.env.VITE_FIREBASE_PROJECT_ID || 'NONE/MISSING'}
+          </span>
         </Link>
       </div>
       <div style={{ position: 'sticky', left: 0, width: '100vw', height: 0, overflow: 'visible', zIndex: 50 }}>
