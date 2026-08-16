@@ -31,7 +31,7 @@ export default function Header({ committeeId, onOpenLedger }) {
       <div className="metadata meta-tr" style={{ fontSize: '1.25rem' }}>@{munName}</div>
 
       <div style={{ position: 'sticky', left: 0, width: '100vw', height: 0, overflow: 'visible', zIndex: 50 }}>
-        <div className="metadata" style={{ bottom: '2rem', left: '50%', transform: 'translateX(-50%)', position: 'absolute' }}>
+        <div className="metadata" style={{ top: 'calc(100vh - 4rem)', left: '50%', transform: 'translateX(-50%)', position: 'absolute' }}>
           <button onClick={() => setShowShare(true)} style={{ fontStyle: 'italic', fontSize: '1rem', textTransform: 'none' }}>Share Session</button>
         </div>
       </div>
