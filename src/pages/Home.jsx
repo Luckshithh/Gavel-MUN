@@ -11,7 +11,7 @@ export default function Home() {
   const [munName, setMunName] = useState(() => {
     return localStorage.getItem('last_mun_name') || '';
   });
-  
+
   const lastSessionId = localStorage.getItem('last_committee_id');
 
   const handleCreate = (e) => {
@@ -19,25 +19,27 @@ export default function Home() {
     if (committeeName.trim() && munName.trim()) {
       localStorage.setItem('last_committee_name', committeeName.trim());
       localStorage.setItem('last_mun_name', munName.trim());
-      
+
       const baseId = committeeName.trim().toLowerCase().replace(/\s+/g, '-');
       const randomHash = Math.random().toString(36).substring(2, 6);
       const id = encodeURIComponent(`${baseId}-${randomHash}`);
-      
+
       localStorage.setItem('last_committee_id', id);
-      
+
       syncStateToDB(id, 'munName', munName.trim());
-      
+
       navigate(`/dashboard/${id}`);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center" style={{ minHeight: '100vh', padding: '2rem' }}>
+      
+      <div className="metadata flex items-center gap-2" style={{ position: 'absolute', top: '2rem', left: '2rem', fontSize: '1.25rem', letterSpacing: '0.1em' }}>
+        Gavell <Gavel size={24} style={{ transform: 'scaleX(-1)' }} />
+      </div>
 
       <div className="card animate-fade-in" style={{ maxWidth: '600px', width: '100%', textAlign: 'center', padding: '4rem 2rem' }}>
-        <Gavel size={64} style={{ margin: '0 auto 1.5rem', opacity: 0.8, transform: 'scaleX(-1)' }} />
-        <h1 style={{ marginBottom: '3rem' }}>GAVEL.</h1>
 
         <form onSubmit={handleCreate} className="flex flex-col gap-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
           <div className="input-group">
@@ -61,10 +63,10 @@ export default function Home() {
           <button type="submit" style={{ padding: '1rem', fontSize: '1.125rem' }}>
             Create Register <ArrowRight size={20} />
           </button>
-          
+
           {lastSessionId && (
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => navigate(`/dashboard/${lastSessionId}`)}
               style={{ padding: '0.5rem', fontSize: '1rem', marginTop: '1rem', color: 'var(--text-secondary)' }}
             >
