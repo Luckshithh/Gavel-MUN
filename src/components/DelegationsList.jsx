@@ -50,9 +50,10 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
   const isListCaucus = isModCaucus || isGslCaucus;
 
   const populateGslSlots = () => {
-    const sorted = [...delegations]
-      .filter(d => d.status !== 'Absent')
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const safeDelegations = Array.isArray(delegations) ? delegations : Object.values(delegations || {});
+    const sorted = [...safeDelegations]
+      .filter(d => d && d.status !== 'Absent')
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     
     const newSlots = {};
     sorted.forEach((del, i) => {
@@ -64,11 +65,11 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
   };
 
   useEffect(() => {
-    if (isGslCaucus && !activeCaucus.slotsPopulated && delegations.length > 0) {
+    if (isGslCaucus && !activeCaucus.slotsPopulated && delegations && (Array.isArray(delegations) ? delegations.length : Object.keys(delegations).length) > 0) {
       populateGslSlots();
-      syncStateToDB(committeeId, 'activeCaucus', { ...activeCaucus, slotsPopulated: true });
+      syncStateToDB(committeeId, 'activeGsl', { ...activeCaucus, slotsPopulated: true });
     }
-  }, [activeCaucus, delegations]);
+  }, [activeCaucus, delegations, isGslCaucus]);
 
   const addDelegation = (e) => {
     e.preventDefault();
