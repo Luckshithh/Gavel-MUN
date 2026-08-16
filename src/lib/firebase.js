@@ -1,78 +1,66 @@
-// We are replacing Firebase with a localStorage-based event emitter system
-// This ensures that state is always saved locally across tab refreshes
-// without requiring any backend configuration.
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, onValue, remove } from 'firebase/database';
 
-const listeners = new Map();
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL
+};
 
-// Helper to get a unique localStorage key for each committee's path
-const getStorageKey = (committeeId, path) => `mun_${committeeId}_${path}`;
+// Initialize Firebase
+let app;
+let database;
+try {
+  app = initializeApp(firebaseConfig);
+  database = getDatabase(app);
+} catch (e) {
+  console.error("Firebase initialization error (make sure your .env file is set up correctly):", e);
+}
 
 /**
- * Saves state to localStorage and triggers local listeners
+ * Saves state to Firebase Realtime Database
  */
 export const syncStateToDB = (committeeId, path, data) => {
-  const key = getStorageKey(committeeId, path);
+  if (!database) {
+    console.warn("Firebase not initialized. Cannot sync state.");
+    return;
+  }
+  const stateRef = ref(database, `committees/${committeeId}/${path}`);
   
   if (data === null || data === undefined) {
-    localStorage.removeItem(key);
+    remove(stateRef).catch(e => console.error("Error removing data:", e));
   } else {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
-  
-  // Trigger any active listeners in the current tab
-  if (listeners.has(key)) {
-    listeners.get(key).forEach(callback => callback(data));
+    set(stateRef, data).catch(e => console.error("Error setting data:", e));
   }
 };
 
 /**
- * Listens to state changes from localStorage
+ * Listens to state changes from Firebase Realtime Database
  */
 export const listenToDBState = (committeeId, path, callback) => {
-  const key = getStorageKey(committeeId, path);
-  
-  // Register the listener
-  if (!listeners.has(key)) {
-    listeners.set(key, new Set());
+  if (!database) {
+    console.warn("Firebase not initialized. Cannot listen to state.");
+    callback(null);
+    return () => {};
   }
-  listeners.get(key).add(callback);
   
-  // Immediately call with the current stored value
-  const stored = localStorage.getItem(key);
-  if (stored !== null) {
-    try {
-      callback(JSON.parse(stored));
-    } catch (e) {
-      console.error("Error parsing stored data for", key, e);
+  const stateRef = ref(database, `committees/${committeeId}/${path}`);
+  
+  const unsubscribe = onValue(stateRef, (snapshot) => {
+    if (snapshot.exists()) {
+      callback(snapshot.val());
+    } else {
       callback(null);
     }
-  } else {
+  }, (error) => {
+    console.error("Error listening to database:", error);
     callback(null);
-  }
+  });
   
   // Return an unsubscribe function
-  return () => {
-    if (listeners.has(key)) {
-      listeners.get(key).delete(callback);
-      if (listeners.get(key).size === 0) {
-        listeners.delete(key);
-      }
-    }
-  };
+  return () => unsubscribe();
 };
-
-// Listen to changes from other tabs so they stay in sync
-if (typeof window !== 'undefined') {
-  window.addEventListener('storage', (e) => {
-    if (e.key && e.key.startsWith('mun_')) {
-      if (listeners.has(e.key)) {
-        try {
-          const data = e.newValue ? JSON.parse(e.newValue) : null;
-          listeners.get(e.key).forEach(callback => callback(data));
-        } catch (err) {
-          console.error("Error parsing cross-tab storage data", err);
-        }
-      }
-    }
-  });
-}
