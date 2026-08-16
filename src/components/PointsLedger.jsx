@@ -180,9 +180,35 @@ export default function PointsLedger({ committeeId, onClose }) {
   };
 
   const handleRemoveDelegation = (id) => {
+    const delToRemove = delegations.find(d => d.id === id);
+    if (!delToRemove) return;
+    const nameToRemove = delToRemove.name;
+
     const updated = delegations.filter(d => d.id !== id);
     setDelegations(updated);
     syncStateToDB(committeeId, 'delegations', updated);
+
+    // Clean up from active Mod Caucus slots
+    let modUpdated = false;
+    const newModSlots = { ...modSpeakerSlots };
+    Object.keys(newModSlots).forEach(key => {
+      if (newModSlots[key] === nameToRemove) {
+        newModSlots[key] = '';
+        modUpdated = true;
+      }
+    });
+    if (modUpdated) syncStateToDB(committeeId, 'mod_speakerSlots', newModSlots);
+
+    // Clean up from active GSL slots
+    let gslUpdated = false;
+    const newGslSlots = { ...gslSpeakerSlots };
+    Object.keys(newGslSlots).forEach(key => {
+      if (newGslSlots[key] === nameToRemove) {
+        newGslSlots[key] = '';
+        gslUpdated = true;
+      }
+    });
+    if (gslUpdated) syncStateToDB(committeeId, 'gsl_speakerSlots', newGslSlots);
   };
 
   return (
