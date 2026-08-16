@@ -22,8 +22,10 @@ export default function Header({ committeeId, onOpenLedger }) {
           Gavell <Gavel size={24} style={{ transform: 'scaleX(-1)' }} />
         </Link>
       </div>
-      <div className="metadata meta-tc" style={{ letterSpacing: '0.2em', fontSize: '1.25rem' }}>
-        {formattedName}
+      <div style={{ position: 'sticky', left: 0, width: '100vw', height: 0, overflow: 'visible', zIndex: 50 }}>
+        <div className="metadata" style={{ top: '2rem', left: '50%', transform: 'translateX(-50%)', position: 'absolute', letterSpacing: '0.2em', fontSize: '1.25rem' }}>
+          {formattedName}
+        </div>
       </div>
 
       <div className="metadata meta-tr" style={{ fontSize: '1.25rem' }}>@{munName}</div>
