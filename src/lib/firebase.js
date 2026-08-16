@@ -32,9 +32,16 @@ export const syncStateToDB = (committeeId, path, data) => {
   const stateRef = ref(database, `committees/${committeeId}/${path}`);
   
   if (data === null || data === undefined) {
-    remove(stateRef).catch(e => console.error("Error removing data:", e));
+    remove(stateRef).catch(e => {
+      console.error("Error removing data:", e);
+    });
   } else {
-    set(stateRef, data).catch(e => console.error("Error setting data:", e));
+    set(stateRef, data).catch(e => {
+      console.error("Error setting data:", e);
+      if (e.message.includes('permission_denied')) {
+        alert("Firebase Permission Denied! Please go to your Firebase Console -> Realtime Database -> Rules, and set .read and .write to true.");
+      }
+    });
   }
 };
 
@@ -58,6 +65,9 @@ export const listenToDBState = (committeeId, path, callback) => {
     }
   }, (error) => {
     console.error("Error listening to database:", error);
+    if (error.message.includes('permission_denied')) {
+        alert("Firebase Permission Denied! Please update your Database Rules to allow read/write.");
+    }
     callback(null);
   });
   
