@@ -86,10 +86,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .meta-tl { top: 2rem; left: 2.5rem; }
-.meta-tc { top: 2rem; left: 50%; transform: translateX(-50%); position: absolute; }
+.meta-tc { top: 2rem; left: 50%; transform: translateX(-50%); }
 .meta-tr { top: 2rem; right: 2.5rem; }
 .meta-bl { bottom: 2rem; left: 2.5rem; }
-.meta-bc { bottom: 2rem; left: 50%; transform: translateX(-50%); position: absolute; }
+.meta-bc { bottom: 2rem; left: 50%; transform: translateX(-50%); }
 .meta-br { bottom: 2rem; right: 2.5rem; }
 
 /* Utilities */
