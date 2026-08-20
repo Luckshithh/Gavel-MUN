@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, onValue, remove } from 'firebase/database';
-import { getAuth, signInAnonymously } from 'firebase/auth';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -34,52 +34,72 @@ try {
  * Saves state to Firebase Realtime Database
  */
 export const syncStateToDB = (committeeId, path, data) => {
-  if (!database) {
+  if (!database || !auth) {
     console.warn("Firebase not initialized. Cannot sync state.");
     return;
   }
-  const stateRef = ref(database, `committees/${committeeId}/${path}`);
-  
-  if (data === null || data === undefined) {
-    remove(stateRef).catch(e => {
-      console.error("Error removing data:", e);
-    });
-  } else {
-    set(stateRef, data).catch(e => {
-      console.error("Error setting data:", e);
-      if (e.message.includes('permission_denied')) {
-        alert("Firebase Permission Denied! Ensure your Firebase Security Rules allow authenticated users to read/write.");
-      }
-    });
-  }
+
+  // Ensure we only write after auth is confirmed
+  onAuthStateChanged(auth, (user) => {
+    if (!user) return;
+    
+    const stateRef = ref(database, `committees/${committeeId}/${path}`);
+    
+    if (data === null || data === undefined) {
+      remove(stateRef).catch(e => {
+        console.error("Error removing data:", e);
+      });
+    } else {
+      set(stateRef, data).catch(e => {
+        console.error("Error setting data:", e);
+        if (e.message.includes('permission_denied')) {
+          console.error("Firebase Permission Denied! Ensure your Firebase Security Rules allow authenticated users to read/write.");
+        }
+      });
+    }
+  });
 };
 
 /**
  * Listens to state changes from Firebase Realtime Database
  */
 export const listenToDBState = (committeeId, path, callback) => {
-  if (!database) {
+  if (!database || !auth) {
     console.warn("Firebase not initialized. Cannot listen to state.");
     callback(null);
     return () => {};
   }
   
   const stateRef = ref(database, `committees/${committeeId}/${path}`);
+  let unsubscribeDB = null;
   
-  const unsubscribe = onValue(stateRef, (snapshot) => {
-    if (snapshot.exists()) {
-      callback(snapshot.val());
+  // Wait for authentication before attaching listener to avoid permission denied
+  const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (!unsubscribeDB) {
+        unsubscribeDB = onValue(stateRef, (snapshot) => {
+          if (snapshot.exists()) {
+            callback(snapshot.val());
+          } else {
+            callback(null);
+          }
+        }, (error) => {
+          console.error("Error listening to database:", error);
+          callback(null);
+        });
+      }
     } else {
-      callback(null);
+      // If user logs out (not expected for anon auth, but good practice), detach listener
+      if (unsubscribeDB) {
+        unsubscribeDB();
+        unsubscribeDB = null;
+      }
     }
-  }, (error) => {
-    console.error("Error listening to database:", error);
-    if (error.message.includes('permission_denied')) {
-        console.error("Firebase Permission Denied! Ensure your Firebase Security Rules allow authenticated users to read/write.");
-    }
-    callback(null);
   });
   
-  // Return an unsubscribe function
-  return () => unsubscribe();
+  // Return an unsubscribe function that cleans up both listeners
+  return () => {
+    unsubscribeAuth();
+    if (unsubscribeDB) unsubscribeDB();
+  };
 };
