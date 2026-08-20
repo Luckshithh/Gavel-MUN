@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, onValue, remove } from 'firebase/database';
+import { getAuth, signInAnonymously } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,9 +15,17 @@ const firebaseConfig = {
 // Initialize Firebase
 let app;
 let database;
+let auth;
+
 try {
   app = initializeApp(firebaseConfig);
   database = getDatabase(app);
+  auth = getAuth(app);
+  
+  // Authenticate anonymously so we can use secure database rules
+  signInAnonymously(auth).catch((error) => {
+    console.error("Firebase Anonymous Auth failed:", error);
+  });
 } catch (e) {
   console.error("Firebase initialization error (make sure your .env file is set up correctly):", e);
 }
@@ -39,7 +48,7 @@ export const syncStateToDB = (committeeId, path, data) => {
     set(stateRef, data).catch(e => {
       console.error("Error setting data:", e);
       if (e.message.includes('permission_denied')) {
-        alert("Firebase Permission Denied! Please go to your Firebase Console -> Realtime Database -> Rules, and set .read and .write to true.");
+        alert("Firebase Permission Denied! Ensure your Firebase Security Rules allow authenticated users to read/write.");
       }
     });
   }
@@ -66,7 +75,7 @@ export const listenToDBState = (committeeId, path, callback) => {
   }, (error) => {
     console.error("Error listening to database:", error);
     if (error.message.includes('permission_denied')) {
-        alert("Firebase Permission Denied! Please update your Database Rules to allow read/write.");
+        console.error("Firebase Permission Denied! Ensure your Firebase Security Rules allow authenticated users to read/write.");
     }
     callback(null);
   });
