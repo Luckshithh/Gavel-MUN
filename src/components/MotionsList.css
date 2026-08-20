@@ -1,0 +1,112 @@
+.motions-header {
+  margin-bottom: 2rem;
+}
+
+.motions-history-btn {
+  color: var(--text-secondary);
+  padding: 0.5rem;
+  background: transparent;
+}
+
+.motions-title {
+  margin: 0;
+}
+
+.motions-form {
+  margin-bottom: 4rem;
+}
+
+.motions-dropdown-wrapper {
+  margin-bottom: 1rem;
+}
+
+.motions-input {
+  margin-bottom: 2rem;
+}
+
+.motions-item {
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 2rem;
+  gap: 1rem;
+}
+
+.motions-proposer {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.motions-text {
+  font-size: 1.5rem;
+  color: inherit;
+}
+
+.motions-empty {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.motions-history-overlay {
+  z-index: 150;
+}
+
+.motions-history-content {
+  background: var(--bg-section);
+  padding: 4rem;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 800px;
+}
+
+.motions-history-header {
+  margin-bottom: 4rem;
+}
+
+.motions-history-close {
+  color: var(--text-secondary);
+  background: transparent;
+  padding: 0.5rem;
+}
+
+.motions-history-list {
+  width: 100%;
+}
+
+.motions-status {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.motions-status-passed {
+  color: var(--text-highlight);
+}
+
+.motions-status-failed {
+  color: var(--accent-dark);
+}
+
+.motions-status-pending {
+  color: var(--text-secondary);
+}
+
+.motions-history-text {
+  font-size: 1.25rem;
+}
+
+.motions-history-text-passed {
+  color: var(--text-highlight);
+}
+
+.motions-history-text-failed {
+  color: var(--accent-dark);
+}
+
+.motions-history-text-pending {
+  color: inherit;
+}
+
+.motions-action-buttons {
+  margin-top: 1rem;
+}

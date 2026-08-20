@@ -1,0 +1,150 @@
+.del-header {
+  margin-bottom: 2rem;
+}
+
+.del-end-btn {
+  color: var(--accent-dark);
+}
+
+.del-topic {
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.del-item {
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 1.5rem;
+}
+
+.del-item-active {
+  border-bottom-style: solid;
+}
+
+.del-item-inactive {
+  border-bottom-style: dashed;
+}
+
+.del-item-row {
+  width: 100%;
+}
+
+.del-speaker-name {
+  transition: all 0.3s ease;
+}
+
+.del-speaker-active {
+  font-size: 2rem;
+  color: var(--text-highlight);
+}
+
+.del-speaker-assigned {
+  font-size: 1.25rem;
+  color: inherit;
+}
+
+.del-speaker-unassigned {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+}
+
+.del-edit-btn {
+  color: var(--text-secondary);
+  padding: 0.25rem;
+  background: transparent;
+}
+
+.del-speaker-details {
+  width: 100%;
+  padding-left: 2rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.del-score-col {
+  flex: 1;
+}
+
+.del-meta-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.del-score-input {
+  font-size: 1rem;
+}
+
+.del-poi-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.del-poi-index {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.del-poi-name {
+  font-size: 1.25rem;
+}
+
+.del-poi-pts {
+  font-size: 1rem;
+  color: var(--text-highlight);
+}
+
+.del-empty {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.del-cycle-header {
+  margin-top: 4rem;
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.del-cycle-text {
+  font-size: 1.25rem;
+  color: var(--text-highlight);
+}
+
+.del-next-btn {
+  color: var(--text-highlight);
+}
+
+.del-unmod-text {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.del-modal-overlay {
+  z-index: 150;
+}
+
+.del-modal-content {
+  background: var(--bg-section);
+  padding: 4rem;
+}
+
+.del-modal-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.del-modal-save-btn {
+  margin-top: 1rem;
+}
+
+.del-modal-points-input {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}

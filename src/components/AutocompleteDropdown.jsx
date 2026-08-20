@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-
+import './AutocompleteDropdown.css';
 export default function AutocompleteDropdown({ options, value, onChange, placeholder }) {
   const [searchTerm, setSearchTerm] = useState(value || '');
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +34,7 @@ export default function AutocompleteDropdown({ options, value, onChange, placeho
   };
 
   return (
-    <div ref={wrapperRef} style={{ position: 'relative', width: '100%', marginBottom: '1rem' }}>
+    <div ref={wrapperRef} className="autocomplete-wrapper">
       <input
         type="text"
         placeholder={placeholder}
@@ -44,46 +44,16 @@ export default function AutocompleteDropdown({ options, value, onChange, placeho
           setIsOpen(true);
         }}
         onFocus={() => setIsOpen(true)}
-        style={{
-          fontSize: '1.5rem',
-          width: '100%',
-          padding: '0.5rem',
-          background: 'transparent',
-          color: 'inherit',
-          border: '1px solid var(--border-color)',
-          outline: 'none'
-        }}
+        className="autocomplete-input"
       />
       
       {isOpen && filteredOptions.length > 0 && (
-        <ul style={{
-          position: 'absolute',
-          top: '100%',
-          left: 0,
-          right: 0,
-          maxHeight: '200px',
-          overflowY: 'auto',
-          background: 'var(--bg-section)',
-          border: '1px solid var(--border-color)',
-          borderTop: 'none',
-          listStyle: 'none',
-          padding: 0,
-          margin: 0,
-          zIndex: 200,
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-        }}>
+        <ul className="autocomplete-dropdown">
           {filteredOptions.map((opt, idx) => (
             <li 
               key={idx}
               onMouseDown={() => handleSelect(opt)} // Use onMouseDown to fire before input onBlur
-              style={{
-                padding: '0.75rem 1rem',
-                fontSize: '1.25rem',
-                cursor: 'pointer',
-                borderBottom: idx === filteredOptions.length - 1 ? 'none' : '1px solid var(--border-color)'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              className="autocomplete-li"
             >
               {opt}
             </li>

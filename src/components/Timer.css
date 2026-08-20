@@ -1,0 +1,39 @@
+.timer-display-critical {
+  color: var(--accent-dark);
+}
+
+.timer-display-normal {
+  color: var(--accent-light);
+}
+
+.timer-controls {
+  margin-top: 2rem;
+  z-index: 30;
+}
+
+.timer-presets {
+  margin-top: 3rem;
+  z-index: 30;
+  color: var(--text-secondary);
+}
+
+.timer-custom-form {
+  margin: 0;
+}
+
+.timer-custom-input {
+  width: 60px;
+  padding: 0.25rem;
+  font-size: 1rem;
+  background: transparent;
+  border-bottom: 1px solid var(--text-secondary);
+  text-align: center;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  outline: none;
+}
+
+.timer-custom-input:focus {
+  border-bottom: 1px solid var(--text-highlight);
+}

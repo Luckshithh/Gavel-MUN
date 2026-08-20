@@ -1,0 +1,161 @@
+.points-ledger-overlay {
+  z-index: 150;
+}
+
+.points-ledger-content {
+  background: var(--bg-section);
+  padding: 4rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.points-ledger-header {
+  margin-bottom: 4rem;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-end;
+}
+
+.points-ledger-form {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+  align-items: baseline;
+}
+
+.points-ledger-input {
+  font-size: 1.25rem;
+  padding: 0.25rem 0;
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid var(--text-secondary);
+}
+
+.points-ledger-add-btn {
+  font-size: 1.125rem;
+}
+
+.points-ledger-csv-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.points-ledger-csv-input {
+  display: none;
+}
+
+.points-ledger-empty {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.points-ledger-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.points-ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 600px;
+}
+
+.points-ledger-thead-tr {
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.points-ledger-th {
+  padding: 1rem;
+  font-weight: normal;
+}
+
+.points-ledger-th.narrow {
+  width: 40px;
+}
+
+.points-ledger-th.center {
+  text-align: center;
+}
+
+.points-ledger-th.right {
+  text-align: right;
+}
+
+.points-ledger-tbody-tr {
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.points-ledger-td {
+  padding: 1.5rem 1rem;
+}
+
+.points-ledger-td.narrow {
+  padding: 1.5rem 0 1.5rem 1rem;
+  width: 40px;
+}
+
+.points-ledger-td.lg {
+  font-size: 1.25rem;
+}
+
+.points-ledger-td.center {
+  text-align: center;
+}
+
+.points-ledger-td.right {
+  text-align: right;
+}
+
+.points-ledger-remove-btn {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  padding: 0;
+  background: transparent;
+}
+
+.points-ledger-status-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: transparent;
+  border-radius: 0;
+  cursor: pointer;
+  min-width: 60px;
+  text-align: center;
+}
+
+.status-pv {
+  color: var(--accent-dark);
+  border: 1px solid var(--accent-dark);
+}
+
+.status-absent {
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.status-present, .status-none {
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.points-ledger-points-input {
+  width: 80px;
+  text-align: right;
+  font-size: 1.5rem;
+  color: var(--text-highlight);
+  border-bottom: 1px solid var(--text-secondary);
+  padding: 0.25rem 0;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}

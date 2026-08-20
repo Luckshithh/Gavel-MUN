@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Gavel, ArrowRight } from 'lucide-react';
 import { syncStateToDB } from '../lib/firebase';
+import './Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -33,15 +34,15 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center" style={{ minHeight: '100vh', padding: '2rem' }}>
+    <div className="flex flex-col items-center justify-center home-container">
       
-      <div className="metadata flex items-center gap-2" style={{ position: 'absolute', top: '2rem', left: '2rem', fontSize: '1.25rem', letterSpacing: '0.1em' }}>
-        Gavell <Gavel size={24} style={{ transform: 'scaleX(-1)' }} />
+      <div className="metadata flex items-center gap-2 home-metadata">
+        Gavell <Gavel size={24} className="home-gavel-icon" />
       </div>
 
-      <div className="card animate-fade-in" style={{ maxWidth: '600px', width: '100%', textAlign: 'center', padding: '4rem 2rem' }}>
+      <div className="card animate-fade-in home-card">
 
-        <form onSubmit={handleCreate} className="flex flex-col gap-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
+        <form onSubmit={handleCreate} className="flex flex-col gap-4 home-form">
           <div className="input-group">
             <input
               type="text"
@@ -49,7 +50,7 @@ export default function Home() {
               value={committeeName}
               onChange={(e) => setCommitteeName(e.target.value)}
               required
-              style={{ padding: '1rem', fontSize: '1.125rem', textAlign: 'center', marginBottom: '1rem', width: '100%' }}
+              className="home-input spaced"
             />
             <input
               type="text"
@@ -57,10 +58,10 @@ export default function Home() {
               value={munName}
               onChange={(e) => setMunName(e.target.value)}
               required
-              style={{ padding: '1rem', fontSize: '1.125rem', textAlign: 'center', width: '100%' }}
+              className="home-input"
             />
           </div>
-          <button type="submit" style={{ padding: '1rem', fontSize: '1.125rem' }}>
+          <button type="submit" className="home-button flex items-center justify-center gap-2">
             Create Register <ArrowRight size={20} />
           </button>
 
@@ -68,7 +69,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => navigate(`/dashboard/${lastSessionId}`)}
-              style={{ padding: '0.5rem', fontSize: '1rem', marginTop: '1rem', color: 'var(--text-secondary)' }}
+              className="home-resume-button"
             >
               Resume Previous Session ({localStorage.getItem('last_committee_name')})
             </button>

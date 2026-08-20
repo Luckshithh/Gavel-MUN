@@ -1,0 +1,48 @@
+.autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.autocomplete-input {
+  font-size: 1.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--border-color);
+  outline: none;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--bg-section);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 200;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.autocomplete-li {
+  padding: 0.75rem 1rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.2s;
+}
+
+.autocomplete-li:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.autocomplete-li:last-child {
+  border-bottom: none;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { listenToDBState } from '../lib/firebase';
 import { Gavel, Table } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import './Header.css';
 
 export default function Header({ committeeId, onOpenLedger }) {
   const [showShare, setShowShare] = useState(false);
@@ -17,24 +18,24 @@ export default function Header({ committeeId, onOpenLedger }) {
 
   return (
     <>
-      <div className="metadata meta-tl" style={{ fontSize: '1.25rem' }}>
-        <Link to="/" style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }} title="Return to Home">
-          Gavell <Gavel size={24} style={{ transform: 'scaleX(-1)' }} />
+      <div className="metadata meta-tl header-meta-tl">
+        <Link to="/" className="header-link" title="Return to Home">
+          Gavell <Gavel size={24} className="header-gavel-icon" />
         </Link>
       </div>
-      <div style={{ position: 'sticky', left: 0, width: '100vw', height: 0, overflow: 'visible', zIndex: 50 }}>
-        <div className="metadata" style={{ top: '2rem', left: '50%', transform: 'translateX(-50%)', position: 'absolute', letterSpacing: '0.2em', fontSize: '1.25rem' }}>
+      <div className="header-name-wrapper">
+        <div className="metadata header-meta-name">
           {formattedName}
         </div>
       </div>
 
-      <div className="metadata meta-tr" style={{ fontSize: '1.25rem' }}>@{munName}</div>
+      <div className="metadata meta-tr header-meta-tr">@{munName}</div>
 
       <div className="metadata meta-bc">
-        <button onClick={() => setShowShare(true)} style={{ fontStyle: 'italic', fontSize: '1rem', textTransform: 'none' }}>Share Session</button>
+        <button onClick={() => setShowShare(true)} className="header-share-btn">Share Session</button>
       </div>
       <div className="metadata meta-br">
-        <button onClick={onOpenLedger} style={{ background: 'transparent', padding: '0.5rem', color: 'var(--text-secondary)' }} title="Master Ledger">
+        <button onClick={onOpenLedger} className="header-ledger-btn" title="Master Ledger">
           <Table size={24} />
         </button>
       </div>
@@ -43,12 +44,12 @@ export default function Header({ committeeId, onOpenLedger }) {
         <div className="modal-overlay animate-fade-in" onClick={() => setShowShare(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setShowShare(false)}>Close (X)</button>
-            <h3 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Share Access</h3>
+            <h3 className="header-share-title">Share Access</h3>
             <input
               type="text"
               readOnly
               value={`${window.location.origin}/dashboard/${committeeId}`}
-              style={{ fontSize: '1.5rem', marginBottom: '2rem' }}
+              className="header-share-input"
             />
             <button
               className="button-large"

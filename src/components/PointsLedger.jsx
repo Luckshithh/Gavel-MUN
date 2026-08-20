@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { syncStateToDB, listenToDBState } from '../lib/firebase';
+import './PointsLedger.css';
 
 export default function PointsLedger({ committeeId, onClose }) {
   const [delegations, setDelegations] = useState([]);
@@ -212,44 +213,44 @@ export default function PointsLedger({ committeeId, onClose }) {
   };
 
   return (
-    <div className="modal-overlay animate-fade-in" onClick={onClose} style={{ zIndex: 150 }}>
-      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ background: 'var(--bg-section)', padding: '4rem', maxHeight: '80vh', overflowY: 'auto' }}>
+    <div className="modal-overlay animate-fade-in points-ledger-overlay" onClick={onClose}>
+      <div className="modal-content points-ledger-content" onClick={e => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>Close (X)</button>
-        <span className="section-title" style={{ marginBottom: '2rem', display: 'block' }}>Master Points Database</span>
+        <span className="section-title">Master Points Database</span>
         
-        <div style={{ marginBottom: '4rem', display: 'flex', gap: '2rem', alignItems: 'flex-end' }}>
-          <form onSubmit={handleAddDelegation} style={{ display: 'flex', gap: '1.5rem', flex: 1, alignItems: 'baseline' }}>
+        <div className="points-ledger-header">
+          <form onSubmit={handleAddDelegation} className="points-ledger-form">
             <input 
               type="text" 
               placeholder="Add new country..." 
               value={newDelegation}
               onChange={(e) => setNewDelegation(e.target.value)}
-              style={{ fontSize: '1.25rem', padding: '0.25rem 0', flex: 1, border: 'none', borderBottom: '1px solid var(--text-secondary)' }}
+              className="points-ledger-input"
             />
-            <button type="submit" style={{ fontSize: '1.125rem' }}>Add</button>
+            <button type="submit" className="points-ledger-add-btn">Add</button>
           </form>
           
-          <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', fontStyle: 'italic', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+          <label className="points-ledger-csv-label">
             Import CSV
-            <input type="file" accept=".csv" onChange={handleCSVUpload} style={{ display: 'none' }} />
+            <input type="file" accept=".csv" onChange={handleCSVUpload} className="points-ledger-csv-input" />
           </label>
         </div>
 
         {delegations.length === 0 ? (
-          <span style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>No delegations registered yet.</span>
+          <span className="points-ledger-empty">No delegations registered yet.</span>
         ) : (
-          <div style={{ width: '100%', overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+          <div className="points-ledger-table-container">
+            <table className="points-ledger-table">
               <thead>
-                <tr style={{ borderBottom: '2px solid var(--border-color)', color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                  <th style={{ padding: '1rem', fontWeight: 'normal', width: '40px' }}></th>
-                  <th style={{ padding: '1rem', fontWeight: 'normal' }}>Delegation</th>
-                  <th style={{ padding: '1rem', fontWeight: 'normal', textAlign: 'center' }}>Status</th>
-                  <th style={{ padding: '1rem', fontWeight: 'normal', textAlign: 'right' }}>Total Points</th>
-                  <th style={{ padding: '1rem', fontWeight: 'normal', textAlign: 'center' }}>GSL Speeches</th>
-                  <th style={{ padding: '1rem', fontWeight: 'normal', textAlign: 'center' }}>Mod Caucuses</th>
-                  <th style={{ padding: '1rem', fontWeight: 'normal', textAlign: 'center' }}>POIs Asked</th>
-                  <th style={{ padding: '1rem', fontWeight: 'normal', textAlign: 'center' }}>Motions</th>
+                <tr className="points-ledger-thead-tr">
+                  <th className="points-ledger-th narrow"></th>
+                  <th className="points-ledger-th">Delegation</th>
+                  <th className="points-ledger-th center">Status</th>
+                  <th className="points-ledger-th right">Total Points</th>
+                  <th className="points-ledger-th center">GSL Speeches</th>
+                  <th className="points-ledger-th center">Mod Caucuses</th>
+                  <th className="points-ledger-th center">POIs Asked</th>
+                  <th className="points-ledger-th center">Motions</th>
                 </tr>
               </thead>
               <tbody>
@@ -270,59 +271,41 @@ export default function PointsLedger({ committeeId, onClose }) {
                   .map(del => {
                     const { currentPoints, totalGSLs, totalMods, totalPOIs, totalMotions } = del;
                   return (
-                    <tr key={del.id} style={{ borderBottom: '1px dashed var(--border-color)' }}>
-                      <td style={{ padding: '1.5rem 0 1.5rem 1rem', width: '40px' }}>
+                    <tr key={del.id} className="points-ledger-tbody-tr">
+                      <td className="points-ledger-td narrow">
                         <button 
                           onClick={() => {
                             if (window.confirm(`Are you sure you want to completely remove ${del.name} from the committee?`)) {
                               handleRemoveDelegation(del.id);
                             }
                           }}
-                          style={{ color: 'var(--text-secondary)', fontSize: '1rem', padding: '0', background: 'transparent' }}
+                          className="points-ledger-remove-btn"
                           title="Remove Delegation"
                         >
                           (x)
                         </button>
                       </td>
-                      <td style={{ padding: '1.5rem 1rem', fontSize: '1.25rem' }}>{del.name}</td>
-                      <td style={{ padding: '1.5rem 1rem', fontSize: '1rem', textAlign: 'center' }}>
+                      <td className="points-ledger-td lg">{del.name}</td>
+                      <td className="points-ledger-td center">
                         <button 
                           onClick={() => toggleStatus(del.id)}
-                          style={{ 
-                            padding: '0.5rem 1rem', 
-                            fontSize: '1rem', 
-                            color: del.status === 'Present and Voting' ? 'var(--accent-dark)' : (del.status === 'Absent' ? 'var(--text-secondary)' : 'var(--text-primary)'),
-                            border: `1px solid ${del.status === 'Present and Voting' ? 'var(--accent-dark)' : 'var(--border-color)'}`,
-                            background: 'transparent',
-                            borderRadius: '0',
-                            cursor: 'pointer',
-                            minWidth: '60px',
-                            textAlign: 'center'
-                          }}
+                          className={`points-ledger-status-btn ${del.status === 'Present and Voting' ? 'status-pv' : (del.status === 'Absent' ? 'status-absent' : (del.status === 'Present' ? 'status-present' : 'status-none'))}`}
                         >
                           {del.status === 'Present' ? 'P' : (del.status === 'Present and Voting' ? 'P&V' : (del.status === 'Absent' ? 'A' : '-'))}
                         </button>
                       </td>
-                      <td style={{ padding: '1.5rem 1rem', textAlign: 'right' }}>
+                      <td className="points-ledger-td right">
                         <input 
                           type="number" 
                           value={currentPoints}
                           onChange={(e) => handleUpdatePoints(del.name, e.target.value)}
-                          style={{ 
-                            width: '80px', 
-                            textAlign: 'right', 
-                            fontSize: '1.5rem', 
-                            color: 'var(--text-highlight)',
-                            borderBottom: '1px solid var(--text-secondary)',
-                            padding: '0.25rem 0',
-                            background: 'transparent'
-                          }}
+                          className="points-ledger-points-input"
                         />
                       </td>
-                      <td style={{ padding: '1.5rem 1rem', fontSize: '1.25rem', textAlign: 'center' }}>{totalGSLs}</td>
-                      <td style={{ padding: '1.5rem 1rem', fontSize: '1.25rem', textAlign: 'center' }}>{totalMods}</td>
-                      <td style={{ padding: '1.5rem 1rem', fontSize: '1.25rem', textAlign: 'center' }}>{totalPOIs}</td>
-                      <td style={{ padding: '1.5rem 1rem', fontSize: '1.25rem', textAlign: 'center' }}>{totalMotions}</td>
+                      <td className="points-ledger-td lg center">{totalGSLs}</td>
+                      <td className="points-ledger-td lg center">{totalMods}</td>
+                      <td className="points-ledger-td lg center">{totalPOIs}</td>
+                      <td className="points-ledger-td lg center">{totalMotions}</td>
                     </tr>
                   );
                 })}

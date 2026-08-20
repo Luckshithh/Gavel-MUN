@@ -1,0 +1,59 @@
+.header-link {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-gavel-icon {
+  transform: scaleX(-1);
+}
+
+.header-meta-tl {
+  font-size: 1.25rem;
+}
+
+.header-name-wrapper {
+  position: sticky;
+  left: 0;
+  width: 100vw;
+  height: 0;
+  overflow: visible;
+  z-index: 50;
+}
+
+.header-meta-name {
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  letter-spacing: 0.2em;
+  font-size: 1.25rem;
+}
+
+.header-meta-tr {
+  font-size: 1.25rem;
+}
+
+.header-share-btn {
+  font-style: italic;
+  font-size: 1rem;
+  text-transform: none;
+}
+
+.header-ledger-btn {
+  background: transparent;
+  padding: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.header-share-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.header-share-input {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}

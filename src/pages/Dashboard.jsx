@@ -108,7 +108,7 @@ export default function Dashboard() {
       </div>
       
       {/* Spacer to allow scrolling past the manuscript */}
-      <div style={{ height: '20vh' }}></div>
+      <div className="dashboard-spacer"></div>
 
       {showLedger && <PointsLedger committeeId={committeeId} onClose={() => setShowLedger(false)} />}
     </div>

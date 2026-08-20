@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { syncStateToDB, listenToDBState } from '../lib/firebase';
 import AutocompleteDropdown from './AutocompleteDropdown';
 import { History, X } from 'lucide-react';
+import './MotionsList.css';
 
 export default function MotionsList({ committeeId }) {
   const [motions, setMotions] = useState([]);
@@ -38,19 +39,19 @@ export default function MotionsList({ committeeId }) {
 
   return (
     <div>
-      <div className="flex justify-between items-baseline" style={{ marginBottom: '2rem' }}>
+      <div className="flex justify-between items-baseline motions-header">
         <div className="flex items-center gap-4">
-          <button onClick={() => setShowHistory(true)} style={{ color: 'var(--text-secondary)', padding: '0.5rem', background: 'transparent' }} title="Motion History">
+          <button onClick={() => setShowHistory(true)} className="motions-history-btn" title="Motion History">
             <History size={24} />
           </button>
-          <span className="section-title" style={{ margin: 0 }}>Motions / Floor</span>
+          <span className="section-title motions-title">Motions / Floor</span>
         </div>
         <button onClick={() => setShowNew(!showNew)} className="button-large">Raise Motion</button>
       </div>
 
       {showNew && (
-        <form onSubmit={addMotion} className="animate-fade-in" style={{ marginBottom: '4rem' }}>
-          <div style={{ marginBottom: '1rem' }}>
+        <form onSubmit={addMotion} className="animate-fade-in motions-form">
+          <div className="motions-dropdown-wrapper">
             <AutocompleteDropdown 
               options={delegations.map(d => d.name)} 
               value={proposer} 
@@ -58,7 +59,7 @@ export default function MotionsList({ committeeId }) {
               placeholder="Proposing Delegation..."
             />
           </div>
-          <input type="text" required value={newMotion} onChange={e => setNewMotion(e.target.value)} placeholder="Motion Details" style={{ marginBottom: '2rem' }} />
+          <input type="text" required value={newMotion} onChange={e => setNewMotion(e.target.value)} placeholder="Motion Details" className="motions-input" />
           <div className="flex gap-8">
             <button type="submit" className="button-large">Submit</button>
             <button type="button" onClick={() => setShowNew(false)}>Cancel</button>
@@ -68,9 +69,9 @@ export default function MotionsList({ committeeId }) {
 
       <div className="text-list">
         {motions.filter(m => m.status === 'pending').map(motion => (
-          <div key={motion.id} className="text-list-item" style={{ flexDirection: 'column', alignItems: 'flex-start', paddingBottom: '2rem', gap: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Proposed by {motion.proposer}</span>
-            <p style={{ fontSize: '1.5rem', color: 'inherit' }}>
+          <div key={motion.id} className="text-list-item motions-item">
+            <span className="motions-proposer">Proposed by {motion.proposer}</span>
+            <p className="motions-text">
               {motion.text}
             </p>
             
@@ -81,32 +82,32 @@ export default function MotionsList({ committeeId }) {
           </div>
         ))}
         {motions.filter(m => m.status === 'pending').length === 0 && (
-          <span style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>No pending motions.</span>
+          <span className="motions-empty">No pending motions.</span>
         )}
       </div>
 
       {showHistory && (
-        <div className="modal-overlay animate-fade-in" onClick={() => setShowHistory(false)} style={{ zIndex: 150 }}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ background: 'var(--bg-section)', padding: '4rem', maxHeight: '80vh', overflowY: 'auto', width: '100%', maxWidth: '800px' }}>
-            <div className="flex justify-between items-baseline" style={{ marginBottom: '4rem' }}>
+        <div className="modal-overlay animate-fade-in motions-history-overlay" onClick={() => setShowHistory(false)}>
+          <div className="modal-content motions-history-content" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-baseline motions-history-header">
               <span className="section-title">Motion History</span>
-              <button onClick={() => setShowHistory(false)} style={{ color: 'var(--text-secondary)', background: 'transparent', padding: '0.5rem' }}><X size={24} /></button>
+              <button onClick={() => setShowHistory(false)} className="motions-history-close"><X size={24} /></button>
             </div>
             <div className="text-list">
               {motions.map(motion => (
-                <div key={motion.id} className="text-list-item" style={{ flexDirection: 'column', alignItems: 'flex-start', paddingBottom: '2rem', gap: '1rem' }}>
-                  <div className="flex justify-between" style={{ width: '100%' }}>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Proposed by {motion.proposer}</span>
-                    <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: motion.status === 'passed' ? 'var(--text-highlight)' : motion.status === 'failed' ? 'var(--accent-dark)' : 'var(--text-secondary)' }}>
+                <div key={motion.id} className="text-list-item motions-item">
+                  <div className="flex justify-between motions-history-list">
+                    <span className="motions-proposer">Proposed by {motion.proposer}</span>
+                    <span className={`motions-status motions-status-${motion.status}`}>
                       {motion.status}
                     </span>
                   </div>
-                  <p style={{ fontSize: '1.25rem', color: motion.status === 'passed' ? 'var(--text-highlight)' : motion.status === 'failed' ? 'var(--accent-dark)' : 'inherit' }}>
+                  <p className={`motions-history-text motions-history-text-${motion.status}`}>
                     {motion.text}
                   </p>
                   
                   {motion.status === 'pending' && (
-                    <div className="flex gap-4" style={{ marginTop: '1rem' }}>
+                    <div className="flex gap-4 motions-action-buttons">
                       <button onClick={() => updateStatus(motion.id, 'passed')}>Pass</button>
                       <button onClick={() => updateStatus(motion.id, 'failed')}>Fail</button>
                     </div>
@@ -114,7 +115,7 @@ export default function MotionsList({ committeeId }) {
                 </div>
               ))}
               {motions.length === 0 && (
-                <span style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>No motions have been raised yet.</span>
+                <span className="motions-empty">No motions have been raised yet.</span>
               )}
             </div>
           </div>

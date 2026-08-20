@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { listenToDBState } from '../lib/firebase';
+import './CaucusManager.css';
 
 export default function CaucusManager({ committeeId, onStartCaucus, activeForeground }) {
   const [activeTab, setActiveTab] = useState(activeForeground?.type === 'gsl' ? null : 'gsl'); 
@@ -53,27 +54,24 @@ export default function CaucusManager({ committeeId, onStartCaucus, activeForegr
 
   return (
     <div>
-      <div className="flex gap-8" style={{ marginBottom: '4rem' }}>
+      <div className="flex gap-8 caucus-tabs">
         {(!activeForeground || activeForeground.type !== 'gsl') && (
           <button 
             onClick={() => handleTabChange('gsl')}
-            style={{ color: activeTab === 'gsl' ? 'var(--text-highlight)' : 'var(--text-secondary)' }}
-            className="button-large"
+            className={`button-large ${activeTab === 'gsl' ? 'tab-active' : 'tab-inactive'}`}
           >
             General Speakers List
           </button>
         )}
         <button 
           onClick={() => handleTabChange('mod')}
-          style={{ color: activeTab === 'mod' ? 'var(--text-highlight)' : 'var(--text-secondary)' }}
-          className="button-large"
+          className={`button-large ${activeTab === 'mod' ? 'tab-active' : 'tab-inactive'}`}
         >
           Moderated
         </button>
         <button 
           onClick={() => handleTabChange('unmod')}
-          style={{ color: activeTab === 'unmod' ? 'var(--text-highlight)' : 'var(--text-secondary)' }}
-          className="button-large"
+          className={`button-large ${activeTab === 'unmod' ? 'tab-active' : 'tab-inactive'}`}
         >
           Unmoderated
         </button>
@@ -99,7 +97,7 @@ export default function CaucusManager({ committeeId, onStartCaucus, activeForegr
               <input type="number" placeholder="Total Time (mins)" value={totalTime} onChange={e => setTotalTime(e.target.value)} required min="0.1" step="0.1" />
             </>
           )}
-          <button type="submit" style={{ alignSelf: 'flex-start', marginTop: '2rem' }}>Start</button>
+          <button type="submit" className="caucus-start-btn">Start</button>
         </form>
       )}
     </div>

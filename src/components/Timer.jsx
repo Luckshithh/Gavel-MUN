@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { listenToDBState, syncStateToDB } from '../lib/firebase';
+import './Timer.css';
 
 export default function Timer({ resetTrigger, committeeId }) {
   // DB State (The ultimate source of truth across all devices)
@@ -136,11 +137,11 @@ export default function Timer({ resetTrigger, committeeId }) {
 
   return (
     <div className="hero-section">
-      <h1 className="display-text animate-fade-in" style={{ color: displayTime <= 10 && displayTime > 0 ? 'var(--accent-dark)' : 'var(--accent-light)' }}>
+      <h1 className={`display-text animate-fade-in ${displayTime <= 10 && displayTime > 0 ? 'timer-display-critical' : 'timer-display-normal'}`}>
         {formatTime(displayTime)}
       </h1>
       
-      <div className="flex items-center gap-8 animate-fade-in" style={{ marginTop: '2rem', zIndex: 30 }}>
+      <div className="flex items-center gap-8 animate-fade-in timer-controls">
         <button onClick={toggle} className="button-large">
           {timerState.isActive ? 'Pause' : 'Start'}
         </button>
@@ -149,12 +150,12 @@ export default function Timer({ resetTrigger, committeeId }) {
         </button>
       </div>
 
-      <div className="flex items-center gap-8 animate-fade-in" style={{ marginTop: '3rem', zIndex: 30, color: 'var(--text-secondary)' }}>
+      <div className="flex items-center gap-8 animate-fade-in timer-presets">
         <button onClick={() => setCustomTime(30)}>30s</button>
         <button onClick={() => setCustomTime(60)}>60s</button>
         <button onClick={() => setCustomTime(90)}>90s</button>
         {showCustomInput ? (
-          <form onSubmit={handleCustomSubmit} className="flex gap-2 items-center" style={{ margin: 0 }}>
+          <form onSubmit={handleCustomSubmit} className="flex gap-2 items-center timer-custom-form">
             <input 
               type="number" 
               value={customInputValue} 
@@ -162,7 +163,7 @@ export default function Timer({ resetTrigger, committeeId }) {
               placeholder="Secs" 
               autoFocus
               onBlur={() => setShowCustomInput(false)}
-              style={{ width: '60px', padding: '0.25rem', fontSize: '1rem', background: 'transparent', borderBottom: '1px solid var(--text-secondary)', textAlign: 'center' }} 
+              className="timer-custom-input"
             />
           </form>
         ) : (

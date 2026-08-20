@@ -1,0 +1,16 @@
+.caucus-tabs {
+  margin-bottom: 4rem;
+}
+
+.caucus-start-btn {
+  align-self: flex-start;
+  margin-top: 2rem;
+}
+
+.tab-active {
+  color: var(--text-highlight);
+}
+
+.tab-inactive {
+  color: var(--text-secondary);
+}

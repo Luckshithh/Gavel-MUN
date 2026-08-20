@@ -278,3 +278,7 @@ input[type="number"] {
   top: -3rem;
   right: 0;
 }
+.dashboard-spacer {
+  height: 20vh;
+}
+

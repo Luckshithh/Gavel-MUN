@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Edit2 } from 'lucide-react';
 import { syncStateToDB, listenToDBState } from '../lib/firebase';
 import AutocompleteDropdown from './AutocompleteDropdown';
+import './DelegationsList.css';
 
 export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssigned, committeeId, statePrefix = '' }) {
   const [delegations, setDelegations] = useState([]);
@@ -234,7 +235,7 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
 
   return (
     <div>
-      <div className="flex justify-between items-baseline" style={{ marginBottom: '2rem' }}>
+      <div className="flex justify-between items-baseline del-header">
         <span className="section-title">
           {isModCaucus ? `Moderated Caucus: ${activeCaucus.topic || 'General'} / ${activeSlotIndex !== null ? activeSlotIndex : 0}/${activeCaucus.slots} Delegates Finished` : 
            isGslCaucus ? `General Speakers List / ${activeSlotIndex !== null ? activeSlotIndex : 0}/${Object.keys(speakerSlots).length} Delegates Finished` : 
@@ -243,7 +244,7 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
         </span>
         <div className="flex gap-4">
           {(isModCaucus || isUnmodCaucus) && (
-            <button onClick={isUnmodCaucus ? endCaucus : handleEndCaucusArchiving} className="button-large" style={{ color: 'var(--accent-dark)' }}>
+            <button onClick={isUnmodCaucus ? endCaucus : handleEndCaucusArchiving} className="button-large del-end-btn">
               End Caucus
             </button>
           )}
@@ -254,7 +255,7 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
         <>
           <div className="text-list">
           {isModCaucus && (
-            <p style={{ fontStyle: 'italic', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+            <p className="del-topic">
               Topic: {activeCaucus.topic}
             </p>
           )}
@@ -263,15 +264,15 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
             const isActive = activeSlotIndex === i;
             
             return (
-              <div key={i} className="text-list-item" style={{ flexDirection: 'column', alignItems: 'flex-start', borderBottomStyle: isActive ? 'solid' : 'dashed', paddingBottom: '1.5rem' }}>
-                <div className="flex justify-between items-baseline" style={{ width: '100%' }}>
+              <div key={i} className={`text-list-item del-item ${isActive ? 'del-item-active' : 'del-item-inactive'}`}>
+                <div className="flex justify-between items-baseline del-item-row">
                   
                   <div className="flex items-center gap-4">
-                    <span style={{ fontSize: isActive ? '2rem' : '1.25rem', color: isAssigned ? (isActive ? 'var(--text-highlight)' : 'inherit') : 'var(--text-secondary)', transition: 'all 0.3s ease' }}>
+                    <span className={`del-speaker-name ${isActive ? 'del-speaker-active' : (isAssigned ? 'del-speaker-assigned' : 'del-speaker-unassigned')}`}>
                       {i + 1}. {speakerSlots[i] || 'Empty Slot'}
                     </span>
                     {isAssigned && isModCaucus && (
-                      <button onClick={() => setEditingSpeaker({ index: i, name: speakerSlots[i] })} style={{ color: 'var(--text-secondary)', padding: '0.25rem' }}>
+                      <button onClick={() => setEditingSpeaker({ index: i, name: speakerSlots[i] })} className="del-edit-btn">
                         <Edit2 size={16} />
                       </button>
                     )}
@@ -286,24 +287,24 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
                 </div>
 
                 {isActive && (
-                  <div className="animate-fade-in" style={{ width: '100%', paddingLeft: '2rem', marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  <div className="animate-fade-in del-speaker-details">
                     
                     <div className="flex gap-8">
-                      <div className="flex flex-col" style={{ flex: 1 }}>
-                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)' }}>Score / Points</span>
+                      <div className="flex flex-col del-score-col">
+                        <span className="del-meta-label">Score / Points</span>
                         <input 
                           type="number" 
                           placeholder="Grade" 
                           value={scores[i]?.sub || ''} 
                           onChange={(e) => handleScoreChange(i, 'sub', parseInt(e.target.value, 10) || '')} 
-                          style={{ fontSize: '1rem' }}
+                          className="del-score-input"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <div className="flex justify-between items-baseline" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', marginBottom: '1rem' }}>
-                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)' }}>Points of Information</span>
+                      <div className="flex justify-between items-baseline del-poi-header">
+                        <span className="del-meta-label">Points of Information</span>
                         <button onClick={() => setAddingPOI({ slotIndex: i, delegation: '', points: '' })}>+ Log POI</button>
                       </div>
                       <div className="flex flex-col gap-2">
@@ -311,17 +312,17 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
                           pois[i].map((poi, idx) => (
                             <div key={idx} className="flex justify-between items-center">
                               <div className="flex gap-4 items-center">
-                                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{idx + 1}.</span>
-                                <span style={{ fontSize: '1.25rem' }}>{poi.delegation}</span>
-                                <button onClick={() => setEditingPOI({ slotIndex: i, poiIndex: idx, delegation: poi.delegation, points: poi.points })} style={{ color: 'var(--text-secondary)', padding: '0.25rem' }}>
+                                <span className="del-poi-index">{idx + 1}.</span>
+                                <span className="del-poi-name">{poi.delegation}</span>
+                                <button onClick={() => setEditingPOI({ slotIndex: i, poiIndex: idx, delegation: poi.delegation, points: poi.points })} className="del-edit-btn">
                                   <Edit2 size={14} />
                                 </button>
                               </div>
-                              <span style={{ fontSize: '1rem', color: 'var(--text-highlight)' }}>+{poi.points} pts</span>
+                              <span className="del-poi-pts">+{poi.points} pts</span>
                             </div>
                           ))
                         ) : (
-                          <span style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>No POIs logged for this speaker.</span>
+                          <span className="del-empty">No POIs logged for this speaker.</span>
                         )}
                       </div>
                     </div>
@@ -333,15 +334,15 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
           })}
         </div>
         {isGslCaucus && (
-          <div className="flex justify-between items-center" style={{ marginTop: '4rem', padding: '2rem', borderTop: '1px solid var(--border-color)' }}>
-            <span style={{ fontSize: '1.25rem', color: 'var(--text-highlight)' }}>
+          <div className="flex justify-between items-center del-cycle-header">
+            <span className="del-cycle-text">
               Current Cycle: {activeCaucus.cycle || 1}
             </span>
             <div className="flex gap-4">
-              <button onClick={handleNextGslCycle} className="button-large" style={{ color: 'var(--text-highlight)' }}>
+              <button onClick={handleNextGslCycle} className="button-large del-next-btn">
                 Next Cycle
               </button>
-              <button onClick={handleEndCaucusArchiving} className="button-large" style={{ color: 'var(--accent-dark)' }}>
+              <button onClick={handleEndCaucusArchiving} className="button-large del-end-btn">
                 End GSL
               </button>
             </div>
@@ -349,33 +350,33 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
         )}
         </>
       ) : isUnmodCaucus ? (
-        <div style={{ color: 'var(--text-secondary)', fontStyle: 'italic', textAlign: 'center', marginTop: '2rem' }}>
+        <div className="del-unmod-text">
           Unmoderated caucus is in session. 
         </div>
       ) : null}
 
       {/* Modals for Editing & Adding */}
       {editingSpeaker && (
-        <div className="modal-overlay animate-fade-in" onClick={() => setEditingSpeaker(null)} style={{ zIndex: 150 }}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ background: 'var(--bg-section)', padding: '4rem' }}>
+        <div className="modal-overlay animate-fade-in del-modal-overlay" onClick={() => setEditingSpeaker(null)}>
+          <div className="modal-content del-modal-content" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setEditingSpeaker(null)}>Close (X)</button>
-            <h3 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Assign Speaker</h3>
+            <h3 className="del-modal-title">Assign Speaker</h3>
             <AutocompleteDropdown 
               options={delegations.map(d => d.name)} 
               value={editingSpeaker.name} 
               onChange={name => setEditingSpeaker({ ...editingSpeaker, name })}
               placeholder="Search Delegation..."
             />
-            <button className="button-large" onClick={saveEditedSpeaker} style={{ marginTop: '1rem' }}>Save Changes</button>
+            <button className="button-large del-modal-save-btn" onClick={saveEditedSpeaker}>Save Changes</button>
           </div>
         </div>
       )}
 
       {addingPOI && (
-        <div className="modal-overlay animate-fade-in" onClick={() => setAddingPOI(null)} style={{ zIndex: 150 }}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ background: 'var(--bg-section)', padding: '4rem' }}>
+        <div className="modal-overlay animate-fade-in del-modal-overlay" onClick={() => setAddingPOI(null)}>
+          <div className="modal-content del-modal-content" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setAddingPOI(null)}>Close (X)</button>
-            <h3 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Log POI</h3>
+            <h3 className="del-modal-title">Log POI</h3>
             <AutocompleteDropdown 
               options={delegations.map(d => d.name)} 
               value={addingPOI.delegation} 
@@ -387,7 +388,7 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
               placeholder="Points"
               value={addingPOI.points} 
               onChange={e => setAddingPOI({ ...addingPOI, points: e.target.value })}
-              style={{ fontSize: '1.5rem', marginBottom: '2rem' }}
+              className="del-modal-points-input"
             />
             <button className="button-large" onClick={saveNewPOI}>Save Changes</button>
           </div>
@@ -395,10 +396,10 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
       )}
 
       {editingPOI && (
-        <div className="modal-overlay animate-fade-in" onClick={() => setEditingPOI(null)} style={{ zIndex: 150 }}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ background: 'var(--bg-section)', padding: '4rem' }}>
+        <div className="modal-overlay animate-fade-in del-modal-overlay" onClick={() => setEditingPOI(null)}>
+          <div className="modal-content del-modal-content" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setEditingPOI(null)}>Close (X)</button>
-            <h3 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Edit POI</h3>
+            <h3 className="del-modal-title">Edit POI</h3>
             <AutocompleteDropdown 
               options={delegations.map(d => d.name)} 
               value={editingPOI.delegation} 
@@ -410,7 +411,7 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
               placeholder="Points"
               value={editingPOI.points} 
               onChange={e => setEditingPOI({ ...editingPOI, points: e.target.value })}
-              style={{ fontSize: '1.5rem', marginBottom: '2rem' }}
+              className="del-modal-points-input"
             />
             <button className="button-large" onClick={saveEditedPOI}>Save Changes</button>
           </div>
