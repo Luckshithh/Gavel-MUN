@@ -1,65 +1,25 @@
 # Gavel-MUN
 
-**A High-Performance Committee Management Platform for Model United Nations**
+** Preview
 
-Gavel-MUN is an advanced, high-performance web platform designed to streamline and elevate the experience of managing a Model United Nations (MUN) committee. Developed with precision, care, and security in mind, this platform solves real-world operational challenges for MUN Chairs and Secretariats by providing dynamic, real-time tools for parliamentary procedure.
+Gavel is a platform i designed after going through multiple gruelling hours of chairing.Honestly listening to the speeches and managing the committee wanst the worst part, it was the 1000 tabs that came with it. I had to switch constantly between timers and multiple poorly organised spreadsheets, and built this as a result of the frustration. this lived in my device locally for a bit before actually pushing it into this repo. It enables a centralised app for ALL your MUN tasks, and when i mean ALL i truly mean it.
 
-## The Value Proposition
-
-Managing a fast-paced MUN committee is operationally taxing. Chairs often struggle to accurately track speaker times, manage unmoderated caucuses, resolve points, and calculate delegation points simultaneously using scattered spreadsheets and standalone timers.
-
-**Gavel-MUN solves this by centralizing committee operations:**
-- **Reduces human error:** Centralized tracking for the General Speaker's List (GSL) and Moderated Caucuses.
-- **Saves time:** Real-time sync ensures that the dais and the delegates are always aligned on the flow of debate.
-- **Empowers the dais:** Seamlessly integrated Points Ledger to accurately evaluate and score delegations based on their participation.
 
 ## Tech Stack
 - **Frontend:** React, Vite, HTML5, Vanilla CSS
-- **Backend & Database:** Firebase Realtime Database (Real-time synchronization across devices)
-- **Authentication:** Firebase Anonymous Authentication (Secured backend access)
-- **Icons & Tooling:** Lucide React
+- **Backend & Database:** Firebase Realtime Database 
+- **Authentication:** Firebase Anonymous Authentication 
 
-## Features Showcase
-- **Dynamic Speaker Lists:** Maintain the GSL and effortlessly reorder, add, or skip speakers.
-- **Advanced Motion Timers:** Specialized timing features for Moderated and Unmoderated caucuses.
-- **Points Ledger:** A comprehensive, scalable point-tracking system for grading delegations based on speeches, Points of Information (POIs), and passed motions.
-- **Real-Time Data Sync:** Instant state reflection for anyone connected to the specific Committee ID.
+## features of the awesome app
+
+- Add countries effortlessly by importing csv( smart import option is available meaning that it will automatically find the country column when there are multiple columns available)
+- Start MODS and UNMODS effortlessy when a GSL is happening
+- Seperate section for Points Of Information (POIs)
+- Seperate secion for Motions ( topic of a passed motion automatically is loaded on to the topic header of the mod and unmod)
 
 ## Security Architecture & Best Practices
 
 To ensure data integrity and safeguard credentials:
-- **Environment Variables:** All Firebase API keys and configurations have been extracted from the source code and are managed via a `.env` file, adhering to Vite's `VITE_FIREBASE_*` conventions. 
-- **Firestore Security Rules:** The database requires authentication to read and write data. Anonymous authentication is utilized behind the scenes so the platform remains seamless for users while enforcing security rules against unauthenticated API requests.
+- **Environment Variables:** All Firebase API keys and configurations have been extracted from the source code and are managed via a `.env` file, following  Vite's `VITE_FIREBASE_*` rules. 
+- **Firestore Security Rules:** The database requires authentication to read and write data. Anonymous authentication is utilized to make it more secure while not compromising on update times.
 
-*Recommendation for Firebase Admins: Ensure your Realtime Database rules enforce `auth != null`.*
-
-## Local Setup Instructions
-
-Follow these instructions to run Gavel-MUN locally on your machine.
-
-### Prerequisites
-- Node.js (v18 or higher recommended)
-- A Firebase project with Realtime Database enabled
-
-### 1. Clone & Install Dependencies
-```bash
-git clone <repository_url>
-cd mun-app
-npm install
-```
-
-### 2. Configure Environment Variables
-This project requires environment variables to connect to your Firebase project.
-
-1. Copy the provided template file:
-   ```bash
-   cp .env.example .env
-   ```
-2. Open the newly created `.env` file and replace the placeholder strings with your actual Firebase project credentials (found in your Firebase Console under Project Settings).
-
-### 3. Start the Development Server
-```bash
-npm run dev
-```
-
-The application will start locally (usually on `http://localhost:5173`).
