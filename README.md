@@ -12,10 +12,12 @@ Gavel is a platform i designed after going through multiple gruelling hours of c
 
 ## features of the awesome app
 
+- cross device link to share it with your super cool vice chairs and real time sync 
 - Add countries effortlessly by importing csv( smart import option is available meaning that it will automatically find the country column when there are multiple columns available)
 - Start MODS and UNMODS effortlessy when a GSL is happening
 - Seperate section for Points Of Information (POIs)
 - Seperate secion for Motions ( topic of a passed motion automatically is loaded on to the topic header of the mod and unmod)
+  
 
 ## Security Architecture & Best Practices
 
