@@ -19,7 +19,7 @@ Gavel is a platform i designed after going through multiple gruelling hours of c
 - Seperate secion for Motions ( topic of a passed motion automatically is loaded on to the topic header of the mod and unmod)
   
 
-## Security Architecture & Best Practices
+## Security Architecture
 
 To ensure data integrity and safeguard credentials:
 - **Environment Variables:** All Firebase API keys and configurations have been extracted from the source code and are managed via a `.env` file, following  Vite's `VITE_FIREBASE_*` rules. 
