@@ -4,12 +4,12 @@
   /* Blue Eclipse Palette */
   --bg-color: #0F0E47;
   --bg-section: #0F0E47; 
-  --accent-light: #8686AC;
+  --accent-light: #B5B5D1;
   --accent-mid: #505081;
   --accent-dark: #272757;
   
-  --text-primary: #8686AC; /* Mistan uses a lighter accent for main text to glow */
-  --text-secondary: #505081;
+  --text-primary: #D6D6E8; /* Mistan uses a lighter accent for main text to glow */
+  --text-secondary: #8686AC;
   --text-highlight: #ffffff;
   --border-color: #505081;
 }
