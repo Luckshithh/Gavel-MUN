@@ -212,6 +212,23 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
   };
 
   const handleEndCaucusArchiving = () => {
+    const backup = {
+      timestamp: Date.now(),
+      action: 'end_caucus',
+      data: {
+        ledger: ledger,
+        poiCount: poiCount,
+        modCount: modCount,
+        gslCount: gslCount,
+        [`${statePrefix}speakerSlots`]: speakerSlots,
+        [`${statePrefix}activeSlotIndex`]: activeSlotIndex,
+        [`${statePrefix}scores`]: scores,
+        [`${statePrefix}pois`]: pois,
+        [isGslCaucus ? 'activeGsl' : 'activeSubCaucus']: activeCaucus
+      }
+    };
+    syncStateToDB(committeeId, 'undoSnapshot', backup);
+
     archiveCurrentScores();
     setSpeakerSlots({}); syncStateToDB(committeeId, `${statePrefix}speakerSlots`, null);
     setActiveSlotIndex(null); syncStateToDB(committeeId, `${statePrefix}activeSlotIndex`, null);
@@ -221,6 +238,23 @@ export default function DelegationsList({ activeCaucus, endCaucus, onSpeakerAssi
   };
 
   const handleNextGslCycle = () => {
+    const backup = {
+      timestamp: Date.now(),
+      action: 'next_cycle',
+      data: {
+        ledger: ledger,
+        poiCount: poiCount,
+        modCount: modCount,
+        gslCount: gslCount,
+        [`${statePrefix}speakerSlots`]: speakerSlots,
+        [`${statePrefix}activeSlotIndex`]: activeSlotIndex,
+        [`${statePrefix}scores`]: scores,
+        [`${statePrefix}pois`]: pois,
+        activeGsl: activeCaucus
+      }
+    };
+    syncStateToDB(committeeId, 'undoSnapshot', backup);
+
     archiveCurrentScores();
     setScores({}); syncStateToDB(committeeId, `${statePrefix}scores`, null);
     setPois({}); syncStateToDB(committeeId, `${statePrefix}pois`, null);

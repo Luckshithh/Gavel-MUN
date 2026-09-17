@@ -1,20 +1,39 @@
 import { useState, useEffect } from 'react';
-import { listenToDBState } from '../lib/firebase';
-import { Gavel, Table } from 'lucide-react';
+import { listenToDBState, syncStateToDB } from '../lib/firebase';
+import { Gavel, Table, Undo2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 
 export default function Header({ committeeId, onOpenLedger }) {
   const [showShare, setShowShare] = useState(false);
   const [munName, setMunName] = useState('2026');
+  const [undoSnapshot, setUndoSnapshot] = useState(null);
   const formattedName = decodeURIComponent(committeeId).replace(/-[a-zA-Z0-9]{4}$/, '').toUpperCase().replace(/-/g, ' ');
 
   useEffect(() => {
     const unsub = listenToDBState(committeeId, 'munName', (data) => {
       if (data) setMunName(data);
     });
-    return () => unsub();
+    const unsubUndo = listenToDBState(committeeId, 'undoSnapshot', (data) => {
+      setUndoSnapshot(data || null);
+    });
+    return () => {
+      unsub();
+      unsubUndo();
+    };
   }, [committeeId]);
+
+  const handleUndo = () => {
+    if (!undoSnapshot || !undoSnapshot.data) return;
+    
+    // Restore all keys from the snapshot
+    Object.keys(undoSnapshot.data).forEach(key => {
+      syncStateToDB(committeeId, key, undoSnapshot.data[key]);
+    });
+    
+    // Clear snapshot
+    syncStateToDB(committeeId, 'undoSnapshot', null);
+  };
 
   return (
     <>
@@ -34,7 +53,12 @@ export default function Header({ committeeId, onOpenLedger }) {
       <div className="metadata meta-bc">
         <button onClick={() => setShowShare(true)} className="header-share-btn">Share Session</button>
       </div>
-      <div className="metadata meta-br">
+      <div className="metadata meta-br" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        {undoSnapshot && (
+          <button onClick={handleUndo} className="header-undo-btn" title="Undo End Caucus">
+            <Undo2 size={24} />
+          </button>
+        )}
         <button onClick={onOpenLedger} className="header-ledger-btn" title="Master Ledger">
           <Table size={24} />
         </button>

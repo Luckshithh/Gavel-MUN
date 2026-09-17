@@ -42,10 +42,13 @@
   text-transform: none;
 }
 
-.header-ledger-btn {
+.header-ledger-btn, .header-undo-btn {
   background: transparent;
   padding: 0.5rem;
   color: var(--text-secondary);
+}
+.header-undo-btn {
+  color: var(--error-color, #ff4444); /* Highlight to show it's an important action */
 }
 
 .header-share-title {
